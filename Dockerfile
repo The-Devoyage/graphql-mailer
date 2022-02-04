@@ -3,6 +3,7 @@ ARG PORT
 ARG GITHUB_TOKEN
 WORKDIR /app
 COPY package*.json ./
+COPY .npmrc .npmrc  
 RUN npm install
 RUN chmod -R 777 node_modules
 COPY . .
