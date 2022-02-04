@@ -1,6 +1,6 @@
 # Graphql Mailer
 
-An easy to add and run automated mailing service that your API can use to send templated and dynamically injected emails to users.
+An easy to add and run automated mailing micro service that your API can use to send templated and dynamically injected emails to users.
 
 Uses Gmail/Google OAuth for the email service, but this can be easily changed to any other service.
 
