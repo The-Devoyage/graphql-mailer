@@ -220,7 +220,9 @@ All GraphQL queries require an `account`. All mutations require both `account` a
 
 Of course, you are welcome to change any of this for your own needs!
 
-Types can be edited from within the `types` directory.
+Types can be edited from within the `types` directory. 
+
+Generate types based on GraphQL TypeDefs by running `npm run generate`. These are saved in `types/generated`.
 
 Context and authorization are parsed from within the `server.ts` file.
 
