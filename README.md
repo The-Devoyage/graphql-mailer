@@ -102,9 +102,22 @@ mailer.send({
 
 ## Usage
 
+### Clone and Install Deps
+
+First clone the repo.
+
+Make sure you have access to the following private repositories:
+1. `@the-devoyage/mongo-filter-generator` -- Required and requires [purchase](https://basetools.io/checkout/vyOL9ATx) for instant access to the repo/package. If you have purchased access to THIS repo, you may request free access to this plugin by emailing nickmclean@thedevoyage.com.
+
+Then install all dependcies
+
+```
+npm install
+```
+
 ### Set Environment Variables
 
-First, move the `.env.example` file to `.env` and fill in the variables to match your accounts/project. Be sure to spin up a mongo instance to take advantage of `layouts` and `contents`.
+Move the `.env.example` file to `.env` and fill in the variables to match your accounts/project. Be sure to spin up a mongo instance to take advantage of `layouts` and `contents`.
 
 ### Run The Application
 
