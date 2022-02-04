@@ -1,3 +1,4 @@
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { Content } from "types/generated";
 export type ObjectID = string;
 
@@ -34,4 +35,10 @@ export interface UseTriggeredContent extends TriggeredContent {
       >
     | undefined;
   trigger?: string;
+}
+
+export interface MailerPostResponse {
+  ok: boolean;
+  error?: string;
+  info?: SMTPTransport.SentMessageInfo;
 }

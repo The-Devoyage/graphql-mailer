@@ -3,6 +3,7 @@ import { Content, Layout } from "@src/models";
 import express, { Request, Response } from "express";
 import {
   DefaultContent,
+  MailerPostResponse,
   SendArgs,
   TriggeredContent,
   UseTriggeredContent,
@@ -23,7 +24,7 @@ const useTriggeredContent = async (
 };
 
 const useDefaultContent = async (defaultContent: DefaultContent) => {
-  let layout: ILayout | undefined = undefined;
+  let layout: ILayout | undefined | null = undefined;
 
   if (defaultContent.layout) {
     layout = await Layout.findOne({ _id: defaultContent.layout });
@@ -43,7 +44,10 @@ MailerRouter.post("/", async (req: Request, res: Response) => {
   const { triggeredContent, defaultContent }: SendArgs = req.body;
 
   if (!defaultContent) {
-    return res.json({ ok: false, error: "Default Content is Required." });
+    return res.json({
+      ok: false,
+      error: "Default Content is Required.",
+    } as MailerPostResponse);
   }
 
   try {
@@ -79,7 +83,10 @@ MailerRouter.post("/", async (req: Request, res: Response) => {
     }
 
     if (!content) {
-      return res.json({ ok: false, error: "Content missing." });
+      return res.json({
+        ok: false,
+        error: "Content missing.",
+      } as MailerPostResponse);
     }
 
     const generated = Mailer.Generate({
@@ -92,7 +99,7 @@ MailerRouter.post("/", async (req: Request, res: Response) => {
       to,
     });
 
-    res.json({ ok: true, info: mailed });
+    res.json({ ok: true, info: mailed } as MailerPostResponse);
   } catch (error) {
     console.log(error);
     res.json({ ok: false });
