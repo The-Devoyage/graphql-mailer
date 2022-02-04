@@ -1,8 +1,10 @@
 # Graphql Mailer
 
-Easily add and run an automated mailing service that your API can use to send templated and dynamically injected emails with the @the-devoyage/graphql-mailer.
+An easy to add and run automated mailing service that your API can use to send templated and dynamically injected emails to users.
 
 Uses Gmail/Google OAuth for the email service, but this can be easily changed to any other service.
+
+Use the service out of the box, or use it as a starting point to customize to your own needs.
 
 ## Features and Highlights
 
@@ -29,7 +31,7 @@ const sent = await fetch("http://localhost:5008/send", {
 });
 ```
 
-Use the package `@the-devoyage/mailer-connect` to quickly set up a typed and reusable connection to your mailer api.
+Avoid having to write numerous `POST` request with the package `@the-devoyage/mailer-connect`, which can be [purchased here](https://basetools.io/checkout/wp7QYNNO), to quickly set up a typed and reusable connection to an external mailer service from your current API.
 
 ```ts
 const sent = await mailer.send({ triggeredContent, defaultContent });
@@ -52,15 +54,18 @@ const sent = await mailer.send({
 
 ### Send Pre-Templated Content with Variables
 
-Save Pre-Designed templates, known as "content", to the GraphQL Mailer Service. This allows you to use the same content across multiple services.
+Save Pre-Designed templates, known as "content", to the GraphQL Mailer Service. This allows you to utilize the same "content" across multiple services.
 
-Each template is referenced to a "trigger". Simply pass the name of the trigger to the request body to utilize the content template.
+Each "content" is referenced to a "trigger". Simply pass the name of the trigger to the request body to utilize the associated content.
 
 ```ts
 mailer.send({
   triggeredContent: {
     to: updatedAccount.email,
     trigger: "PASSWORD_RESET",
+  },
+  defaultContent: {
+    // The Default Content Arg is Required, as if the triggered content can not be found on the server, it will fall back to the default content.
   },
 });
 ```
@@ -138,6 +143,8 @@ const sendMail = await fetch("http://localhost:5008/send", {
 });
 ```
 
+Check out the `@the-devoyage/mailer-connect` package to avoid having to write `POST` request. This package provides a typed function to send the arguments to the mailer server.
+
 ### Layouts
 
 Layouts are pre-designed HTML templates that are saved to the GraphQL Mailer Database. Layouts do not contain dynamic variables, but can be injected with a `Content`, which is described below. Layouts MUST can contain a variable, `{{content}}` which will allow a Content to be dynamically injected into the layout.
@@ -178,3 +185,45 @@ Content can contain dynamic and custom variables.
   </p>
 </body>
 ```
+
+## Security
+
+### Connecting To The Mailer Server
+
+This server should only be exposed to your current api and should never be exposed to the public in production.
+
+### Authorization and Authentication
+
+**Built In Auth**
+
+The `/send` route is for internal use only and does not require authentication or authorization.
+
+All `GraphQL` requests require Authorization and Authentication. Authentication should be completed by an external service such as a Gateway.
+
+Once the Gateway Authenticates the user, it should pass the following `request headers` to the Mailer Server.
+
+```ts
+interface RequiredHeaders {
+  token: DecodedToken; // Must be stringified to send as a request header.
+  isAuth: boolean; // Must be stringified to send as a request header.
+}
+
+interface DecodedToken {
+  account?: { _id: string; email: string };
+  user?: { _id: string; role: number; email: string };
+}
+```
+
+All GraphQL queries require an `account`. All mutations require both `account` and `user`. Since this is most likely an Admin Level API, the user role must be equal to the integer 1, the default admin level role.
+
+**Can I Modify These To Fit My Current Authorization Server?**
+
+Of course, you are welcome to change any of this for your own needs!
+
+Types can be edited from within the `types` directory.
+
+Context and authorization are parsed from within the `server.ts` file.
+
+The `helpers` directory contains the `auth` helpers.
+
+Auth Checks and Role Checks are done at the Resolver Level.
