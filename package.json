@@ -1,6 +1,6 @@
 {
-  "name": "graphql-mailer",
-  "version": "0.0.3",
+  "name": "@the-devoyage/graphql-mailer",
+  "version": "0.0.4",
   "description": "A dockerized graphql microservice that uses node-mailer to automate emails.",
   "main": "server.js",
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@apollo/federation": "^0.29.1",
-    "@the-devoyage/mongo-filter-generator": "^0.1.22",
+    "@the-devoyage/mongo-filter-generator": "^0.1.23",
     "apollo-server-express": "^3.6.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

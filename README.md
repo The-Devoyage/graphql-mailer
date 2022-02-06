@@ -107,6 +107,7 @@ mailer.send({
 First clone the repo.
 
 Make sure you have access to the following private repositories:
+
 1. `@the-devoyage/mongo-filter-generator` -- Required and requires [purchase](https://basetools.io/checkout/vyOL9ATx) for instant access to the repo/package. If you have purchased access to THIS repo, you may request free access to this plugin by emailing nickmclean@thedevoyage.com.
 
 Then install all dependcies
@@ -233,7 +234,7 @@ All GraphQL queries require an `account`. All mutations require both `account` a
 
 Of course, you are welcome to change any of this for your own needs!
 
-Types can be edited from within the `types` directory. 
+Types can be edited from within the `types` directory.
 
 Generate types based on GraphQL TypeDefs by running `npm run generate`. These are saved in `types/generated`.
 
