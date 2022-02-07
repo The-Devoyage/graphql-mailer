@@ -1,6 +1,6 @@
 {
   "name": "@the-devoyage/graphql-mailer",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A dockerized graphql microservice that uses node-mailer to automate emails.",
   "main": "server.js",
   "scripts": {
@@ -16,7 +16,6 @@
     "@graphql-codegen/cli": "^2.3.0",
     "@graphql-codegen/typescript": "^2.4.1",
     "@graphql-codegen/typescript-resolvers": "^2.4.2",
-    "@types/mongoose": "^5.10.4",
     "@types/nodemailer": "^6.4.4",
     "typescript": "^4.2.3"
   },
