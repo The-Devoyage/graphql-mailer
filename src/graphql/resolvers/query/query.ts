@@ -1,11 +1,11 @@
 import { GenerateMongo } from "@the-devoyage/mongo-filter-generator";
-import { checkAuth } from "@src/helpers";
 import { Content, Layout } from "@src/models";
 import {
   QueryResolvers,
   Layout as ILayout,
   Content as IContent,
 } from "types/generated";
+import { Helpers } from "@the-devoyage/micro-auth-helpers";
 
 export const Query: QueryResolvers = {
   generate: async () => {
@@ -23,7 +23,7 @@ export const Query: QueryResolvers = {
   },
   getLayouts: async (_, args, context) => {
     try {
-      checkAuth({ context });
+      Helpers.Resolver.CheckAuth({ context });
 
       const { filters, options } = GenerateMongo({
         fieldFilters: args.getLayoutsInput,
@@ -40,7 +40,7 @@ export const Query: QueryResolvers = {
   },
   getContents: async (_, args, context) => {
     try {
-      checkAuth({ context });
+      Helpers.Resolver.CheckAuth({ context });
 
       const { filters, options } = GenerateMongo({
         fieldFilters: args.getContentsInput,
