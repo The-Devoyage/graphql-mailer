@@ -1,21 +1,20 @@
-import { checkAuth, limitRole } from "@src/helpers";
 import { Content, Layout } from "@src/models";
-import {
-  MutationResolvers,
-  Layout as ILayout,
-  Content as IContent,
-} from "types/generated";
+import { Helpers } from "@the-devoyage/micro-auth-helpers";
+import { MutationResolvers } from "types/generated";
 
 export const Mutation: MutationResolvers = {
   createContent: async (_, args, context) => {
     try {
-      checkAuth({ context, requireUser: true });
+      Helpers.Resolver.CheckAuth({ context, requireUser: true });
 
-      limitRole(context.token.user?.role, 1);
+      Helpers.Resolver.LimitRole({
+        userRole: context.auth.decodedToken?.user?.role,
+        roleLimit: 1,
+      });
 
       const content = new Content({
         ...args.createContentInput,
-        created_by: context.token.user?._id,
+        created_by: context.auth.decodedToken?.user?._id,
       });
 
       await content.save();
@@ -28,9 +27,12 @@ export const Mutation: MutationResolvers = {
   },
   createLayout: async (_, args, context) => {
     try {
-      checkAuth({ context, requireUser: true });
+      Helpers.Resolver.CheckAuth({ context, requireUser: true });
 
-      limitRole(context.token.user?.role, 1);
+      Helpers.Resolver.LimitRole({
+        userRole: context.auth.decodedToken?.user?.role,
+        roleLimit: 1,
+      });
 
       const containsContentVariable =
         args.createLayoutInput.html.includes("{{content}}");
@@ -44,7 +46,7 @@ export const Mutation: MutationResolvers = {
 
       const layout = new Layout({
         ...args.createLayoutInput,
-        created_by: context.token.user?._id,
+        created_by: context.auth.decodedToken?.user?._id,
       });
 
       await layout.save();
@@ -57,7 +59,7 @@ export const Mutation: MutationResolvers = {
   },
   updateLayout: async (_, args, context) => {
     try {
-      checkAuth({ context, requireUser: true });
+      Helpers.Resolver.CheckAuth({ context, requireUser: true });
 
       const layout = await Layout.findOne({
         _id: args.updateLayoutInput._id,
@@ -67,8 +69,11 @@ export const Mutation: MutationResolvers = {
         throw new Error("Layout does not exist.");
       }
 
-      if (layout.created_by !== context.token.user?._id) {
-        limitRole(context.token.user?.role, 1);
+      if (layout.created_by !== context.auth.decodedToken?.user?._id) {
+        Helpers.Resolver.LimitRole({
+          userRole: context.auth.decodedToken?.user?.role,
+          roleLimit: 1,
+        });
       }
 
       const updated = await Layout.findOneAndUpdate(
@@ -84,7 +89,7 @@ export const Mutation: MutationResolvers = {
   },
   updateContent: async (_, args, context) => {
     try {
-      checkAuth({ context, requireUser: true });
+      Helpers.Resolver.CheckAuth({ context, requireUser: true });
 
       const content = await Content.findOne({
         _id: args.updateContentInput._id,
@@ -94,8 +99,11 @@ export const Mutation: MutationResolvers = {
         throw new Error("Content does not exist.");
       }
 
-      if (content.created_by !== context.token.user?._id) {
-        limitRole(context.token.user?.role, 1);
+      if (content.created_by !== context.auth.decodedToken?.user?._id) {
+        Helpers.Resolver.LimitRole({
+          userRole: context.auth.decodedToken?.user?.role,
+          roleLimit: 1,
+        });
       }
 
       const updated = await Content.findOneAndUpdate(

@@ -1,12 +1,12 @@
 import { buildSubgraphSchema } from "@apollo/federation";
-import { typeDefs } from "@the-devoyage/mongo-filter-generator";
-import { Resolvers } from "./resolvers";
-import * as TypeDefs from "./typeDefs";
+import { GraphQL } from "@the-devoyage/mongo-filter-generator";
+import { resolvers } from "./resolvers";
+import { typeDefs } from "./typeDefs";
 
 export const schema = buildSubgraphSchema([
   {
-    typeDefs: TypeDefs.Mailer,
-    resolvers: Resolvers,
+    typeDefs: typeDefs.Mailer,
+    resolvers: resolvers.Mailer,
   },
-  { typeDefs: typeDefs },
+  { typeDefs: GraphQL.typeDefs, resolvers: GraphQL.resolvers },
 ]);

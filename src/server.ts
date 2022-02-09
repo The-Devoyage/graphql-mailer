@@ -9,7 +9,7 @@ import { ApolloServer } from "apollo-server-express";
 import express from "express";
 import cors from "cors";
 import { MailerRouter } from "@src/routes";
-import { Context, TokenContext } from "types/context";
+import { Helpers } from "@the-devoyage/micro-auth-helpers";
 dotenv.config();
 
 const app = express();
@@ -23,19 +23,7 @@ let apolloServer;
 const startServer = async () => {
   apolloServer = new ApolloServer({
     schema: schema,
-    context: ({ req }): Context => {
-      const { token, isauth } = req.headers;
-      let parsedToken: TokenContext = {};
-      let parsedAuthStatus: boolean = false;
-      if (token !== "undefined" && typeof token === "string") {
-        parsedToken = JSON.parse(token);
-      }
-      if (isauth !== "undefined" && typeof isauth === "string") {
-        parsedAuthStatus = JSON.parse(isauth);
-      }
-
-      return { token: parsedToken, isAuth: parsedAuthStatus };
-    },
+    context: ({ req }) => Helpers.Service.GenerateContext({ req }),
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });
