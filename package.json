@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@apollo/federation": "^0.29.1",
-    "@the-devoyage/micro-auth-helpers": "^0.1.18",
+    "@the-devoyage/micro-auth-helpers": "^0.1.19",
     "@the-devoyage/mongo-filter-generator": "^0.2.0",
     "apollo-server-express": "^3.6.2",
     "cors": "^2.8.5",
