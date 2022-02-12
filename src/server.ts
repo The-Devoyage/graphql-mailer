@@ -23,7 +23,7 @@ let apolloServer;
 const startServer = async () => {
   apolloServer = new ApolloServer({
     schema: schema,
-    context: ({ req }) => Helpers.Service.GenerateContext({ req }),
+    context: ({ req }) => Helpers.Subgraph.GenerateContext({ req }),
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });
