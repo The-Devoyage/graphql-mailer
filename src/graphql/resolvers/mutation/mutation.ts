@@ -8,13 +8,13 @@ export const Mutation: MutationResolvers = {
       Helpers.Resolver.CheckAuth({ context, requireUser: true });
 
       Helpers.Resolver.LimitRole({
-        userRole: context.auth.decodedToken?.user?.role,
+        userRole: context.auth.payload.user?.role,
         roleLimit: 1,
       });
 
       const content = new Content({
         ...args.createContentInput,
-        created_by: context.auth.decodedToken?.user?._id,
+        created_by: context.auth.payload.user?._id,
       });
 
       await content.save();
@@ -30,7 +30,7 @@ export const Mutation: MutationResolvers = {
       Helpers.Resolver.CheckAuth({ context, requireUser: true });
 
       Helpers.Resolver.LimitRole({
-        userRole: context.auth.decodedToken?.user?.role,
+        userRole: context.auth.payload.user?.role,
         roleLimit: 1,
       });
 
@@ -46,7 +46,7 @@ export const Mutation: MutationResolvers = {
 
       const layout = new Layout({
         ...args.createLayoutInput,
-        created_by: context.auth.decodedToken?.user?._id,
+        created_by: context.auth.payload.user?._id,
       });
 
       await layout.save();
@@ -69,9 +69,9 @@ export const Mutation: MutationResolvers = {
         throw new Error("Layout does not exist.");
       }
 
-      if (layout.created_by !== context.auth.decodedToken?.user?._id) {
+      if (layout.created_by !== context.auth.payload.user?._id) {
         Helpers.Resolver.LimitRole({
-          userRole: context.auth.decodedToken?.user?.role,
+          userRole: context.auth.payload.user?.role,
           roleLimit: 1,
         });
       }
@@ -99,9 +99,9 @@ export const Mutation: MutationResolvers = {
         throw new Error("Content does not exist.");
       }
 
-      if (content.created_by !== context.auth.decodedToken?.user?._id) {
+      if (content.created_by !== context.auth.payload.user?._id) {
         Helpers.Resolver.LimitRole({
-          userRole: context.auth.decodedToken?.user?.role,
+          userRole: context.auth.payload.user?.role,
           roleLimit: 1,
         });
       }
