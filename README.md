@@ -2,7 +2,7 @@
 
 An automated mailing micro service that your API can use to send templated and dynamically injected emails to users.
 
-Uses Gmail/Google OAuth for the email service.
+Connect Gmail/Google with Google OAuth.
 
 Use the service out of the box, or use it as a starting point to create your own mailing micro-service.
 
@@ -124,15 +124,15 @@ Clone the `@the-devoyage/graphql-mailer` repo. [Purchase Access](https://basetoo
 
 Make sure you have access to the following private repositories:
 
-1. `@the-devoyage/mongo-filter-generator` - Adds filtering and pagination to this API. [Purchase Access](https://basetools.io/checkout/vyOL9ATx)
+### Install Dependencies
 
-2. Once you have access to the required repos above, be sure to login to the Github registry with NPM.
+1. Login to the Github registry with NPM.
 
 ```
 npm login --registry=https://npm.pkg.github.com
 ```
 
-3. Install Dependencies
+2. Install Dependencies
 
 ```
 npm install
@@ -232,21 +232,20 @@ Query the server as you would any other GraphQL server. Try using the sandbox/gr
 
 **Required Headers**
 
-The gateway is responsible to pass headers to this micro-service. In general, the gateway will receive a encrypted JSON Web Token, decrypt it, and verify that is valid. If it is valid, the request is then sent to the external micro-services as headers.
-
-The microservice then can parse the headers and pass them as context to the resolvers, allowing the application to securely grant authorization at a resolver level.
-
-1. token: TokenContext as stringified json
-2. isauth: boolean as stringified json
+All GraphQL resolvers within this service require a `context` header to be passed with the request. The `context` header should be stringified JSON of the type Context. Be sure to include the `auth` property.
 
 ```ts
-interface DecodedToken {
-  account?: { _id: string; email: string };
-  user?: {
-    _id?: string;
-    role?: number;
-    email?: string;
+interface Context extends Record<string, any> {
+  auth: {
+    account: { _id: string; email: string } | null;
+    user: {
+      _id: string;
+      role: number;
+      email: string;
+    } | null;
+    isAuth: boolean;
   };
+  // ...context
 }
 ```
 
