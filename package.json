@@ -1,11 +1,11 @@
 {
   "name": "@the-devoyage/graphql-mailer",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "A dockerized graphql microservice that uses node-mailer to automate emails.",
   "main": "server.js",
   "scripts": {
-    "start": "node dist/server.js",
-    "dev": "tsc -w & nodemon dist/server.js",
+    "start": "tsc; node dist/server.js",
+    "dev": "tsc; tsc -w & nodemon dist/server.js",
     "build": "tsc",
     "generate": "graphql-codegen"
   },
