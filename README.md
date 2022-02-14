@@ -4,25 +4,19 @@ An automated mailing micro service that your API can use to send templated and d
 
 Connect Gmail/Google with Google OAuth.
 
-Use the service out of the box, or use it as a starting point to create your own mailing micro-service.
+Use the service as is in production, or use it as a starting point to create your own mailing micro-service.
 
 ## Features
 
 ### Listen for Webhooks
 
-Once started, this server listens for `POST` request to a custom endpoint.
-
-From an external service, send the POST request with the details about the email you want to send to the user.
+Send `POST` requests to the `/send` endpoint (which can be customized with env vars), to send automated emails from external services.
 
 ```ts
+// External Service Posting The Webhook
 const sent = await fetch("http://localhost:5008/send", {
   method: "POST",
   body: JSON.stringify({
-    triggeredContent: {
-      to: updatedAccount.email,
-      trigger: "PASSWORD_RESET",
-      variables: { first_name: "Nick" },
-    },
     defaultContent: {
       to: updatedAccount.email,
       html: `<h3>Success!</h3><p>${first_name}, your password has been reset.`,
@@ -33,29 +27,22 @@ const sent = await fetch("http://localhost:5008/send", {
 });
 ```
 
-Use the package `@the-devoyage/mailer-connect` to quickly POST the webhook with typed inputs. [Purchased Access](https://basetools.io/checkout/wp7QYNNO).
+Use the [`@the-devoyage/mailer-connect` package](https://github.com/The-Devoyage/mailer-connect/packages/1234394) to quickly POST the webhook with typed inputs parameters. [Show Some Love for the Mailer Connect Package - $$](https://basetools.io/checkout/wp7QYNNO).
 
 The following examples will mainly use this package to demonstrate.
 
 ```ts
 import { TriggeredContent, DefaultContent } from "@the-devoyage/mailer-connect";
 
-const triggeredContent: TriggeredContent = {
-  // ...
-};
-
-const defaultContent: DefaultContent = {
-  // ...
-};
-
-const sent = await mailer.send({ triggeredContent, defaultContent });
+const sent = await mailer.send({ defaultContent: myEmail });
 ```
 
-### Send Default Content from your Current API
+### Default Content
 
-Generate HTML from your existing API and send custom emails to your users.
+Use HTML and variables existing on the external API to send custom emails to your users.
 
 ```ts
+// External Service Posting The Webhook
 const sent = await mailer.send({
   defaultContent: {
     to: updatedAccount.email,
@@ -66,13 +53,18 @@ const sent = await mailer.send({
 });
 ```
 
-### Send Triggered Content with Variables
+### Triggered Content - Reusable Templates
 
-Share "content" between external services to easily send the same emails from different APIs.
+Use HTML existing on the Mailer Server to send custom emails to users.
 
-Each "content" is referenced to a "trigger" and stored on the mailer service. Simply pass the name of the trigger to the request body to utilize the content.
+1. Create `Content`
+
+   Use the GraphQL Resolver, `createContent` to create a new `content` object. Each `content` is tied to a `trigger`. This will save an HTML template to the connected mongo db instance that you can later reference by `trigger.
+
+2. Send a post request from the external service. This time, use `triggeredContent` and pass the `trigger` name. Now, the server will use the HTML located on the Mailer Server instead of the HTML located within the external service.
 
 ```ts
+// External Service Posting to the Webhook
 mailer.send({
   triggeredContent: {
     to: updatedAccount.email,
@@ -99,6 +91,8 @@ Example Content Pre-Made on the Mailer Server:
 Below, the triggered content accepts variables to generate the same dynamic content as the custom default content. The difference is, the triggered content is reusable while the default content needs to be written each time the request is called.
 
 ```ts
+// External Service
+
 const varibales = { first_name: "nick" };
 
 mailer.send({
@@ -121,8 +115,6 @@ mailer.send({
 ### Clone and Install Deps
 
 Clone the `@the-devoyage/graphql-mailer` repo. [Purchase Access](https://basetools.io/checkout/8G2fCyXe)
-
-Make sure you have access to the following private repositories:
 
 ### Install Dependencies
 
@@ -172,9 +164,7 @@ npm start
 
 ### Create Layout and Content
 
-If you want to use triggered content, you must create a content using the graphql api.
-
-Optionally you can also pass a layout that the content will be injected into, at the time of sending.
+If you want to use triggered content, you must create a content using the graphql api on this server.
 
 ### Send Automated Emails
 
@@ -188,20 +178,31 @@ const sendMail = await fetch("http://localhost:5008/send", {
       to: updatedAccount.email,
       trigger: "PASSWORD_RESET",
       variables: { first_name: "Nick" },
-      layout: "12345-must-be-valid-object-id",
+      layout: "12345", // must be valid object id
     },
     defaultContent: {
       to: updatedAccount.email,
       html: `<h3>Success!</h3><p>${first_name}, your password has been reset.`,
       plainText: `Success! ${first_name}, your password has been reset!`,
       subject: "Password Reset",
-      layout: "12345-must-be-valid-object-id",
+      layout: "12345", // must be valid object id
     },
   }),
 });
 ```
 
 ## Resolvers
+
+### Content
+
+Content are pre-designed HTML that can be sent as standalone emails or be dynamically inserted into pre-designed HTML `Layout`s.
+
+From the GraphQL Playground/Sandbox you can manipulate content:
+
+- Create Content
+- Update Content
+- Delete Content
+- Get Content
 
 ### Layouts
 
@@ -215,20 +216,9 @@ Layouts are pre-designed HTML templates that are saved to the GraphQL Mailer Dat
 
 - Delete Layout - Admins are able to delete layouts. Requires user role of 1.
 
-### Content
-
-Content are pre-designed HTML that can be sent as standalone emails or be dynamically inserted into pre-designed HTML Layouts.
-
-From the GraphQL Playground/Sandbox you can manipulate content:
-
-- Create Content - Admin may create content.
-- Update Content - Admin may update content.
-- Delete Content - Admin may delete content.
-- Get Contents - Returns a paginated and filterable list of content documents.
-
 ## Querying the Server
 
-Query the server as you would any other GraphQL server. Try using the sandbox/graphql playground located at the gateway's graphql url.
+Query the server as you would any other GraphQL server. Try using the sandbox/graphql playground located at the gateway's graphql url. The webhook route should only be accessed from inside the API with a POST request directly to this server.
 
 **Required Headers**
 
