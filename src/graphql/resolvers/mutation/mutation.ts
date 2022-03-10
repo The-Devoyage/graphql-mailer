@@ -34,8 +34,9 @@ export const Mutation: MutationResolvers = {
         roleLimit: 1,
       });
 
-      const containsContentVariable =
-        args.createLayoutInput.html.includes("{{content}}");
+      const containsContentVariable = args.createLayoutInput.html.includes(
+        "{{content}}"
+      );
 
       const containsMultipleVariables =
         args.createLayoutInput.html.split("{{").length - 1 > 1;

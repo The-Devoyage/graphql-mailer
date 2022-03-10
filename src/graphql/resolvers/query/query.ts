@@ -25,12 +25,12 @@ export const Query: QueryResolvers = {
     try {
       Helpers.Resolver.CheckAuth({ context });
 
-      const { filters, options } = GenerateMongo({
+      const { filter, options } = GenerateMongo({
         fieldFilters: args.getLayoutsInput,
         config: args.getLayoutsInput.config,
       });
 
-      const layouts = await Layout.findAndPaginate<ILayout>(filters, options);
+      const layouts = await Layout.findAndPaginate<ILayout>(filter, options);
 
       return layouts;
     } catch (error) {
@@ -42,15 +42,12 @@ export const Query: QueryResolvers = {
     try {
       Helpers.Resolver.CheckAuth({ context });
 
-      const { filters, options } = GenerateMongo({
+      const { filter, options } = GenerateMongo({
         fieldFilters: args.getContentsInput,
         config: args.getContentsInput.config,
       });
 
-      const contents = await Content.findAndPaginate<IContent>(
-        filters,
-        options
-      );
+      const contents = await Content.findAndPaginate<IContent>(filter, options);
 
       return contents;
     } catch (error) {

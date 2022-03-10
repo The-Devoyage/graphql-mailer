@@ -30,16 +30,20 @@ const startServer = async () => {
 };
 startServer();
 
-let DB = process.env.MONGO_URI!;
-mongoose
-  .connect(DB, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  })
-  .then(() => console.log("Mailer DB Connected to Mailer Service!"))
-  .catch((err) => console.log(err));
+const DB = process.env.MONGO_URI;
+if (DB) {
+  mongoose
+    .connect(DB, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+    })
+    .then(() => console.log("Mailer DB Connected to Mailer Service!"))
+    .catch((err) => console.log(err));
+} else {
+  console.log("Mongo DB Not Connected -- MONGO URI NOT PROVIDED");
+}
 
 const port = process.env.PORT || 5008;
 
