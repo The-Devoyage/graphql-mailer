@@ -26,13 +26,13 @@ export const Mailer = gql`
   }
 
   type GetLayoutsResponse {
-    data: [Layout]
-    stats: Stats
+    data: [Layout!]!
+    stats: Stats!
   }
 
   type GetContentsResponse {
-    data: [Content]
-    stats: Stats
+    data: [Content!]!
+    stats: Stats!
   }
 
   type CompositionDetail {
@@ -41,26 +41,26 @@ export const Mailer = gql`
   }
 
   input GetLayoutsInput {
-    _id: StringFieldFilter
-    name: StringFieldFilter
-    html: StringFieldFilter
-    createdAt: StringFieldFilter
-    updatedAt: StringFieldFilter
-    created_by: StringFieldFilter
+    _id: [StringFieldFilter]
+    name: [StringFieldFilter]
+    html: [StringFieldFilter]
+    createdAt: [DateFieldFilter]
+    updatedAt: [DateFieldFilter]
+    created_by: [StringFieldFilter]
     config: FilterConfig
   }
 
   input GetContentsInput {
-    _id: StringFieldFilter
-    name: StringFieldFilter
-    subject: StringFieldFilter
-    plainText: StringFieldFilter
-    html: StringFieldFilter
-    created_by: StringFieldFilter
-    createdAt: StringFieldFilter
-    updatedAt: StringFieldFilter
-    trigger: StringFieldFilter
-    active: BooleanFieldFilter
+    _id: [StringFieldFilter]
+    name: [StringFieldFilter]
+    subject: [StringFieldFilter]
+    plainText: [StringFieldFilter]
+    html: [StringFieldFilter]
+    created_by: [StringFieldFilter]
+    createdAt: [DateFieldFilter]
+    updatedAt: [DateFieldFilter]
+    trigger: [StringFieldFilter]
+    active: [BooleanFieldFilter]
     config: FilterConfig
   }
 
