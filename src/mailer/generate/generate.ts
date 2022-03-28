@@ -14,11 +14,10 @@ export const Generate = (generateArgs: {
         | "active"
       >
     | undefined;
-  contentVariables?: Record<string, any>;
+  contentVariables?: Record<string, unknown>;
 }): Partial<Content> => {
   const { content, contentVariables } = generateArgs;
   let html: string | undefined = content?.html;
-  let plainText: string;
 
   if (content?.layout) {
     html = content.layout.html.replace("{{content}}", content.html);
@@ -28,7 +27,7 @@ export const Generate = (generateArgs: {
   html = contentTemplate(contentVariables);
 
   const contentPlainTextTemplate = handlebars.compile(content?.plainText);
-  plainText = contentPlainTextTemplate(contentVariables);
+  const plainText = contentPlainTextTemplate(contentVariables);
 
   return { ...content, html, plainText };
 };

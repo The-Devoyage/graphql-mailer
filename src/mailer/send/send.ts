@@ -33,6 +33,10 @@ export const Send = async (
 
     const accessToken = await oauth2Client.getAccessToken();
 
+    if (!accessToken || !accessToken.token) {
+      throw new Error("Access token missing.");
+    }
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -41,7 +45,7 @@ export const Send = async (
         clientId: credentials.clientId,
         clientSecret: credentials.clientSecret,
         refreshToken: credentials.refreshToken,
-        accessToken: accessToken.token!,
+        accessToken: accessToken.token,
       },
     });
 

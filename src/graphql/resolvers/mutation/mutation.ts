@@ -1,6 +1,10 @@
 import { Content, Layout } from "@src/models";
 import { Helpers } from "@the-devoyage/micro-auth-helpers";
-import { MutationResolvers } from "types/generated";
+import {
+  MutationResolvers,
+  Content as IContent,
+  Layout as ILayout,
+} from "types/generated";
 
 export const Mutation: MutationResolvers = {
   createContent: async (_, args, context) => {
@@ -12,12 +16,18 @@ export const Mutation: MutationResolvers = {
         roleLimit: 1,
       });
 
-      const content = new Content({
+      const newContent = new Content({
         ...args.createContentInput,
         created_by: context.auth.payload.user?._id,
       });
 
-      await content.save();
+      await newContent.save();
+
+      const content = await Content.findOne<IContent>({ _id: newContent._id });
+
+      if (!content) {
+        throw new Error("Could not find newly saved content.");
+      }
 
       return content;
     } catch (error) {
@@ -45,12 +55,18 @@ export const Mutation: MutationResolvers = {
         throw new Error("Layouts must only contain one variable, {{content}}.");
       }
 
-      const layout = new Layout({
+      const newLayout = new Layout({
         ...args.createLayoutInput,
         created_by: context.auth.payload.user?._id,
       });
 
-      await layout.save();
+      await newLayout.save();
+
+      const layout = await Layout.findOne<ILayout>({ _id: newLayout._id });
+
+      if (!layout) {
+        throw new Error("Could not find newly saved layout.");
+      }
 
       return layout;
     } catch (error) {
@@ -62,7 +78,7 @@ export const Mutation: MutationResolvers = {
     try {
       Helpers.Resolver.CheckAuth({ context, requireUser: true });
 
-      const layout = await Layout.findOne({
+      const layout = await Layout.findOne<ILayout>({
         _id: args.updateLayoutInput._id,
       });
 
@@ -77,10 +93,14 @@ export const Mutation: MutationResolvers = {
         });
       }
 
-      const updated = await Layout.findOneAndUpdate(
+      const updated = await Layout.findOneAndUpdate<ILayout>(
         { _id: layout._id },
         args.updateLayoutInput
       );
+
+      if (!updated) {
+        throw new Error("Could not find and update layout.");
+      }
 
       return updated;
     } catch (error) {
@@ -92,7 +112,7 @@ export const Mutation: MutationResolvers = {
     try {
       Helpers.Resolver.CheckAuth({ context, requireUser: true });
 
-      const content = await Content.findOne({
+      const content = await Content.findOne<IContent>({
         _id: args.updateContentInput._id,
       });
 
@@ -107,7 +127,7 @@ export const Mutation: MutationResolvers = {
         });
       }
 
-      const updated = await Content.findOneAndUpdate(
+      const updated = await Content.findOneAndUpdate<IContent>(
         { _id: content._id },
         args.updateContentInput,
         { new: true }

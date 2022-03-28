@@ -33,12 +33,7 @@ startServer();
 const DB = process.env.MONGO_URI;
 if (DB) {
   mongoose
-    .connect(DB, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
-    })
+    .connect(DB)
     .then(() => console.log("Mailer DB Connected to Mailer Service!"))
     .catch((err) => console.log(err));
 } else {

@@ -15,12 +15,22 @@ export const MailerRouter = express.Router({ strict: true });
 const useTriggeredContent = async (
   triggeredContent: TriggeredContent
 ): Promise<UseTriggeredContent> => {
-  const foundContent = await Content.findOne({
-    trigger: triggeredContent.trigger,
-    active: true,
-  }).populate("layout");
+  try {
+    const foundContent = await Content.findOne<IContent>({
+      trigger: triggeredContent.trigger,
+      active: true,
+    }).populate("layout");
 
-  return { ...triggeredContent, content: foundContent?._doc };
+    if (!foundContent) {
+      throw new Error("Could not find content.");
+    }
+
+    // If return here fails, convert content back to foundContent._doc
+    return { ...triggeredContent, content: foundContent };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 const useDefaultContent = async (defaultContent: DefaultContent) => {
@@ -63,8 +73,8 @@ MailerRouter.post("/", async (req: Request, res: Response) => {
           | "active"
         >
       | undefined;
-    let variables: Record<string, any> | undefined;
-    let to: string = "";
+    let variables: Record<string, unknown> | undefined;
+    let to = "";
 
     if (triggeredContent) {
       let generated = await useTriggeredContent(triggeredContent);
