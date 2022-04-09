@@ -21,11 +21,6 @@ const useTriggeredContent = async (
       active: true,
     }).populate("layout");
 
-    if (!foundContent) {
-      throw new Error("Could not find content.");
-    }
-
-    // If return here fails, convert content back to foundContent._doc
     return { ...triggeredContent, content: foundContent };
   } catch (error) {
     console.log(error);
@@ -72,7 +67,8 @@ MailerRouter.post("/", async (req: Request, res: Response) => {
           | "trigger"
           | "active"
         >
-      | undefined;
+      | undefined
+      | null;
     let variables: Record<string, unknown> | undefined;
     let to = "";
 

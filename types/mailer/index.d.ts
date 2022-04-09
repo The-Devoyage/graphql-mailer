@@ -33,7 +33,8 @@ export interface UseTriggeredContent extends TriggeredContent {
         | "trigger"
         | "active"
       >
-    | undefined;
+    | undefined
+    | null;
   trigger?: string;
 }
 
