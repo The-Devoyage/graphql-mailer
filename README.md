@@ -6,14 +6,21 @@ Connect Gmail/Google with Google OAuth.
 
 Use the service as is in production, or use it as a starting point to create your own mailing micro-service.
 
+## License
+
+This repository provides a GPL License by default. If you want to use this product in a private commercial setting, you may purchase the MIT Licensed Version [Here!](https://thedevoyage.gumroad.com/l/graphql-mailer)
+
 ## Features
 
-### Listen for Webhooks
+### Listen for Webhooks From Your API
 
-Send `POST` requests to the `/send` endpoint (which can be customized with env vars), to send automated emails from external services.
+After an event happens in your API, simply POST to the `/send` endpoint of this server to send a templated email.
 
 ```ts
-// External Service Posting The Webhook
+// Accounts API
+// User successfully resets password...
+// Send POST Request to the mailer service to trigger email using fetch.
+
 const sent = await fetch("http://localhost:5008/send", {
   method: "POST",
   body: JSON.stringify({
@@ -27,22 +34,17 @@ const sent = await fetch("http://localhost:5008/send", {
 });
 ```
 
-Use the [`@the-devoyage/mailer-connect` package](https://github.com/The-Devoyage/mailer-connect/packages/1234394) to quickly POST the webhook with typed inputs parameters. [Show Some Love for the Mailer Connect Package - $$](https://basetools.io/checkout/wp7QYNNO).
-
-The following examples will mainly use this package to demonstrate.
-
-```ts
-import { TriggeredContent, DefaultContent } from "@the-devoyage/mailer-connect";
-
-const sent = await mailer.send({ defaultContent: myEmail });
-```
+Use the [`@the-devoyage/mailer-connect` package](https://github.com/The-Devoyage/mailer-connect/packages/1234394) to quickly POST the webhook with typed inputs parameters.
 
 ### Default Content
 
-Use HTML and variables existing on the external API to send custom emails to your users.
+HTML and Variables are provided from the source of the triggering event allowing you to use HTML and Variables from the origin source. 
 
 ```ts
-// External Service Posting The Webhook
+// Accounts API
+// User successfully resets password...
+// Send POST Request to the mailer service to trigger email using @the-devoyage/mailer-connect library.
+
 const sent = await mailer.send({
   defaultContent: {
     to: updatedAccount.email,
@@ -55,16 +57,19 @@ const sent = await mailer.send({
 
 ### Triggered Content - Reusable Templates
 
-Use HTML existing on the Mailer Server to send custom emails to users.
+HTML and Variables are stored on the Mailer Service, allowing you to reuse content.
 
 1. Create `Content`
 
-   Use the GraphQL Resolver, `createContent` to create a new `content` object. Each `content` is tied to a `trigger`. This will save an HTML template to the connected mongo db instance that you can later reference by `trigger.
+   Use the GraphQL Resolver, `createContent` to create a new `content` object. Each `content` is tied to a `trigger`. This will save an HTML template to the connected mongo db instance that you can later reference by `trigger`.
 
 2. Send a post request from the external service. This time, use `triggeredContent` and pass the `trigger` name. Now, the server will use the HTML located on the Mailer Server instead of the HTML located within the external service.
 
 ```ts
-// External Service Posting to the Webhook
+// Accounts API
+// User successfully updates email.
+// Send POST Request to the mailer service to trigger email using @the-devoyage/mailer-connect library.
+
 mailer.send({
   triggeredContent: {
     to: updatedAccount.email,
@@ -91,7 +96,9 @@ Example Content Pre-Made on the Mailer Server:
 Below, the triggered content accepts variables to generate the same dynamic content as the custom default content. The difference is, the triggered content is reusable while the default content needs to be written each time the request is called.
 
 ```ts
-// External Service
+// Accounts API
+// User successfully updates email.
+// Send POST Request to the mailer service to trigger email using @the-devoyage/mailer-connect library.
 
 const varibales = { first_name: "nick" };
 
@@ -114,7 +121,7 @@ mailer.send({
 
 ### Clone and Install Deps
 
-Clone the `@the-devoyage/graphql-mailer` repo. [Purchase Access](https://basetools.io/checkout/8G2fCyXe)
+Clone the `@the-devoyage/graphql-mailer` repo.
 
 ### Install Dependencies
 
@@ -131,12 +138,6 @@ npm install
 ```
 
 If you are using docker to build and run this server, you will need to pass the github token along to the build process.
-
-Assign an environment variable to the Github Token locally:
-
-```bash
-export GITHUB_TOKEN=mytoken
-```
 
 For docker, you can run:
 
@@ -239,10 +240,3 @@ interface Context extends Record<string, any> {
 }
 ```
 
-## Recommended Services
-
-- `@the-devoyage/graphql-gateway` - An apollo gateway server with pre-configured features such as user authorization, file routing/file upload routing, and supergraph configuration. This repo is compatible with this service and can act as the gateway for this service. [Purchase Access](https://basetools.io/checkout/XGUVNNGr)
-
-- `@the-devoyage/graphql-accounts` - An accounts service that handles account creation, authentication, and verification. It is compatible with this service out and can handle supplying the requirements for the `account` property of the token above. [Purchase Access](https://basetools.io/checkout/v0cv56df)
-
-- `@the-devoyage/graphql-users` - A Users Microservice to manage the members of accounts. This service is compatible with the mailer, and can handle supplying the `user` information for the token above. [Purchase Access](https://basetools.io/checkout/dQe81uv0)
