@@ -1,6 +1,6 @@
 {
   "name": "@the-devoyage/graphql-mailer",
-  "version": "0.1.19",
+  "version": "0.2.0",
   "description": "A dockerized graphql microservice that uses node-mailer to automate emails.",
   "main": "server.js",
   "scripts": {
@@ -12,9 +12,9 @@
   "author": "Nick McLean",
   "license": "ISC",
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.3.0",
-    "@graphql-codegen/typescript": "^2.4.1",
-    "@graphql-codegen/typescript-resolvers": "^2.4.2",
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/typescript": "^2.4.11",
+    "@graphql-codegen/typescript-resolvers": "^2.6.4",
     "@types/nodemailer": "^6.4.4",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
@@ -22,15 +22,14 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "@apollo/federation": "^0.29.1",
+    "@apollo/subgraph": "^2.0.3",
     "@the-devoyage/micro-auth-helpers": "^0.1.20",
-    "@the-devoyage/mongo-filter-generator": "^0.3.3",
-    "apollo-server-express": "^3.6.2",
+    "apollo-server-express": "^3.7.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.2",
     "googleapis": "^92.0.0",
-    "graphql": "^15.7.2",
+    "graphql": "^16.5.0",
     "handlebars": "^4.7.7",
     "module-alias": "^2.2.2",
     "mongoose": "6.2.4",
