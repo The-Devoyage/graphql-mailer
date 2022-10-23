@@ -125,10 +125,24 @@ Clone the `@the-devoyage/graphql-mailer` repo.
 
 ### Install Dependencies
 
-Install with NPM
+1. Login to the Github registry with NPM.
+
+```
+npm login --registry=https://npm.pkg.github.com
+```
+
+2. Install Dependencies
 
 ```
 npm install
+```
+
+If you are using docker to build and run this server, you will need to pass the github token along to the build process.
+
+For docker, you can run:
+
+```bash
+docker build -t --build-arg GTIHUB_TOKEN=${GITHUB_TOKEN} .
 ```
 
 4. Configure Environment Variables
