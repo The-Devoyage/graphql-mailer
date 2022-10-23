@@ -1,7 +1,6 @@
 # Changelog
 
-## [v0.2.1]
-- Remove requirements for Git Hub Personal Access Tokens.
+## [Unreleased]
 
 ## [v0.2.0]
 
