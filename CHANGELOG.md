@@ -1,6 +1,10 @@
 # Changelog
 
-## [Unreleased]
+## [v0.2.1]
+
+### Changed
+
+- Remove requirement for GitHub PAT in non docker builds.
 
 ## [v0.2.0]
 
